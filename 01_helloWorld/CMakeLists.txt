@@ -3,17 +3,12 @@ cmake_minimum_required(VERSION 3.10)
 set(PATCH_VERSION "2" CACHE INTERNAL "Patch version")
 set(PROJECT_VESRION 0.0.${PATCH_VERSION})
 
-project(helloWorld VERSION ${PROJECT_VESRION})
+project(01_helloWorld VERSION ${PROJECT_VESRION})
 
 configure_file(version.h.in version.h)
 
 add_executable(helloworld_cli main.cpp)
 add_library(helloworld lib.cpp)
-
-set_target_properties(helloworld_cli helloworld PROPERTIES
-    CXX_STANDARD 17
-    CXX_STANDARD_REQUIRED ON
-)
 
 target_include_directories(helloworld
     PRIVATE "${CMAKE_BINARY_DIR}"
@@ -21,6 +16,11 @@ target_include_directories(helloworld
 
 target_link_libraries(helloworld_cli PRIVATE
     helloworld
+)
+
+set_target_properties(helloworld_cli helloworld PROPERTIES
+    CXX_STANDARD 17
+    CXX_STANDARD_REQUIRED ON
 )
 
 if (MSVC)
@@ -56,3 +56,5 @@ include(CPack)
 enable_testing()
 
 add_subdirectory(GTests)
+
+target_include_directories(tests PUBLIC ${CMAKE_BINARY_DIR})
