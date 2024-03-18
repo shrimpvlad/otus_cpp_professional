@@ -29,10 +29,6 @@ jobs:
           cmake --build build_${{ matrix.directory }}
           cmake --build build_${{ matrix.directory }} --target test
           cmake --build build_${{ matrix.directory }} --target package
-        # Clear CMake cache
-      - run: cmake --build . --config Release --target clean
-      - run: rm -rf build
-      
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
