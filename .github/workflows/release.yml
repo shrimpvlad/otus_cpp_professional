@@ -29,6 +29,7 @@ jobs:
           cmake --build build_${{ matrix.directory }}
           cmake --build build_${{ matrix.directory }} --target test
           cmake --build build_${{ matrix.directory }} --target package
+          ls -al build_${{ matrix.directory }}
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
