@@ -21,13 +21,13 @@ jobs:
         with:
           submodules: true
       - run: sudo apt-get update && sudo apt-get install cmake libgtest-dev -y
-      - run: cmake . -DPATCH_VERSION=${{ github.run_number }}
+      - name: Configure CMake
+        run: cmake . -DPATCH_VERSION=${{ github.run_number }}
+        working-directory: ${{ matrix.directory }}
       - name: Build ${{ matrix.directory }} directory
         run: |
-          cmake -B build_${{ matrix.directory }} -S ${{ matrix.directory }}
-          cmake --build build_${{ matrix.directory }}
-          cmake --build build_${{ matrix.directory }} --target test
-          cmake --build build_${{ matrix.directory }} --target package
+          cmake --build . --config Release
+          ctest
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
