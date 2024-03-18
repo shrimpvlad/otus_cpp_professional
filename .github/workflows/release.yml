@@ -46,6 +46,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./01_helloWorld/build_01_helloWorld/otus_cpp_professional-0.0.${{ github.run_number }}-Linux.deb
+          asset_path: ./${{ matrix.directory }}/build_${{ matrix.directory }}/otus_cpp_professional-0.0.${{ github.run_number }}-Linux.deb
           asset_name: otus_cpp_professional-0.0.${{ github.run_number }}-Linux.deb
           asset_content_type: application/vnd.debian.binary-package
