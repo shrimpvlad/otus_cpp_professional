@@ -72,7 +72,7 @@ add_custom_command(TARGET ipFilter POST_BUILD
 
 # Настраиваем упаковщик для создания deb-пакета
 set(CPACK_GENERATOR DEB)
-set(CPACK_PACKAGE_NAME "ip_filter")
+set(CPACK_PACKAGE_NAME ${PROJECT_NAME})
 set(CPACK_PACKAGE_CONTACT "example@example.com")
 include(CPack)
 
