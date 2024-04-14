@@ -14,7 +14,9 @@ jobs:
       matrix:
         directory:
           - 01_helloWorld
-          # - another_directory
+          - 02_ipFilter
+          # - 03_allocator
+          - 04_ipTemplates
     permissions: write-all
     steps:
       - uses: actions/checkout@v3
@@ -25,10 +27,13 @@ jobs:
         working-directory: ${{ matrix.directory }}
       - name: Build ${{ matrix.directory }} directory
         run: |
-          cmake -B build -S ${{ matrix.directory }}
-          cmake --build build
-          cmake --build build --target test
-          cmake --build build --target package
+          for dir in "${{ matrix.directory }}"; do
+            echo "Building $dir directory"
+            cmake -B $dir/build -S $dir
+            cmake --build $dir/build
+            cmake --build $dir/build --target test
+            cmake --build $dir/build --target package
+          done
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -44,8 +49,11 @@ jobs:
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PROJECT_NAME: ${{ env.PROJECT_NAME }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ github.workspace }}/build/hello_world-0.0.${{ github.run_number }}-Linux.deb
-          asset_name: hello_world-0.0.${{ github.run_number }}-Linux.deb
+          asset_path: ${{ github.workspace }}/${{ matrix.directory }}/build/${{ env.PROJECT_NAME }}-0.0.${{ github.run_number }}-Linux.deb
+          asset_name: ${{ env.PROJECT_NAME }}-0.0.${{ github.run_number }}-Linux.deb
           asset_content_type: application/vnd.debian.binary-package
+        
+        
