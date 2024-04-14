@@ -1,10 +1,19 @@
+# cmake_minimum_required(VERSION 3.10)
+
+# set(PATCH_VERSION "51" CACHE INTERNAL "Patch version")
+# set(PROJECT_VESRION 0.0.${PATCH_VERSION})
+# project(04_ipTemplates VERSION ${PROJECT_VESRION})
+
+# set(ENV{PROJECT_NAME} "04_ipTemplates")
 cmake_minimum_required(VERSION 3.10)
 
-set(PATCH_VERSION "51" CACHE INTERNAL "Patch version")
-set(PROJECT_VESRION 0.0.${PATCH_VERSION})
-project(04_ipTemplates VERSION ${PROJECT_VESRION})
+project(04_ipTemplates VERSION ${PROJECT_VERSION})
 
 set(ENV{PROJECT_NAME} "04_ipTemplates")
+
+# Определяем PATCH_VERSION из переменной окружения GITHUB_RUN_NUMBER
+set(PATCH_VERSION "$ENV{GITHUB_RUN_NUMBER}" CACHE INTERNAL "Patch version")
+set(PROJECT_VERSION 0.0.${PATCH_VERSION})
 
 configure_file(version.h.in version.h)
 
