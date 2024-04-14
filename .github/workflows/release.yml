@@ -13,10 +13,10 @@ jobs:
     strategy:
       matrix:
         directory:
-          # - 01_helloWorld
-          - 02_ipFilter
+          - 01_helloWorld
+          # - 02_ipFilter
           # - 03_allocator
-          - 04_ipTemplates
+          # - 04_ipTemplates
     permissions: write-all
     env:
       PROJECT_NAME: ${{ matrix.directory }} # Устанавливаем PROJECT_NAME для всех директорий
