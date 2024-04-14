@@ -44,6 +44,11 @@ jobs:
           release_name: Release ${{ github.run_number }}
           draft: false
           prerelease: false
+      - name: Print PROJECT_NAME for each directory
+        run: |
+          for dir in "${{ matrix.directory }}"; do
+            echo "PROJECT_NAME for $dir is $(cat ${{ github.workspace }}/$dir/project_name.txt)"
+          done
       - name: Upload Release Asset
         id: upload-release-asset
         uses: actions/upload-release-asset@v1
