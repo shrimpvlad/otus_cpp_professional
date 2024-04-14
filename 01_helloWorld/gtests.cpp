@@ -1,7 +1,6 @@
 #include <gtest/gtest.h>
-
-#include "lib.h"
+#include "version.h"
 
 TEST(CheckVersionNumber, correct_version) {
-    ASSERT_TRUE(version() != 100);
+    ASSERT_GT(BUILD_NUM, 0);
 }

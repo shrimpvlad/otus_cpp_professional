@@ -10,7 +10,7 @@ configure_file(version.h.in version.h)
 
 add_executable(helloworld_cli main.cpp)
 add_library(helloworld lib.cpp)
-add_executable(gtests gtests.cpp lib.cpp)
+add_executable(gtests gtests.cpp)
 target_include_directories(gtests
     PRIVATE "${CMAKE_BINARY_DIR}"
 )
