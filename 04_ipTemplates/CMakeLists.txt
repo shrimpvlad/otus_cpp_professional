@@ -1,21 +1,7 @@
-# cmake_minimum_required(VERSION 3.10)
 
-# set(PATCH_VERSION "51" CACHE INTERNAL "Patch version")
-# set(PROJECT_VESRION 0.0.${PATCH_VERSION})
-# project(04_ipTemplates VERSION ${PROJECT_VESRION})
-
-# set(ENV{PROJECT_NAME} "04_ipTemplates")
 cmake_minimum_required(VERSION 3.10)
 
-project(04_ipTemplates VERSION ${PROJECT_VERSION})
-
-set(ENV{PROJECT_NAME} "04_ipTemplates")
-
-# Определяем PATCH_VERSION из переменной окружения GITHUB_RUN_NUMBER
-set(PATCH_VERSION "$ENV{GITHUB_RUN_NUMBER}" CACHE INTERNAL "Patch version")
-set(PROJECT_VERSION 0.0.${PATCH_VERSION})
-
-configure_file(version.h.in version.h)
+project(04_ipTemplates)
 
 add_executable(printIp main.cpp)
 
@@ -59,9 +45,9 @@ target_link_libraries(gtests PRIVATE gtest gtest_main)
 gtest_discover_tests(gtests)
 set(CPACK_GENERATOR DEB)
 set(CPACK_PACKAGE_NAME ${PROJECT_NAME})
-set(CPACK_PACKAGE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")
-set(CPACK_PACKAGE_VERSION_MINOR "${PROJECT_VERSION_MINOR}")
-set(CPACK_PACKAGE_VERSION_PATCH "${PROJECT_VERSION_PATCH}")
+set(CPACK_PACKAGE_VERSION_MAJOR 0)
+set(CPACK_PACKAGE_VERSION_MINOR 0)
+set(CPACK_PACKAGE_VERSION_PATCH "${BUILD_NUM}")
 set(CPACK_PACKAGE_CONTACT "example@example.com")
 include(CPack)
 
