@@ -5,24 +5,19 @@ project(01_helloWorld)
 
 set(BUILD_NUM 0 CACHE STRING "Build number")
 
-
 configure_file(version.h.in version.h)
 
+
 add_executable(helloworld_cli main.cpp)
-add_library(helloworld lib.cpp)
 add_executable(gtests gtests.cpp)
+target_include_directories(helloworld_cli
+    PRIVATE "${CMAKE_CURRENT_BINARY_DIR}"
+)
 target_include_directories(gtests
-    PRIVATE "${CMAKE_BINARY_DIR}"
-)
-target_include_directories(helloworld
-    PRIVATE "${CMAKE_BINARY_DIR}"
+    PRIVATE "${CMAKE_CURRENT_BINARY_DIR}"
 )
 
-target_link_libraries(helloworld_cli PRIVATE
-    helloworld
-)
-
-set_target_properties(helloworld_cli helloworld gtests PROPERTIES
+set_target_properties(helloworld_cli gtests PROPERTIES
     CXX_STANDARD 17
     CXX_STANDARD_REQUIRED ON
 )
@@ -31,14 +26,14 @@ if (MSVC)
     target_compile_options(helloworld_cli PRIVATE
         /W4
     )
-    target_compile_options(helloworld PRIVATE
+    target_compile_options(gtests PRIVATE
         /W4
     )
 else ()
     target_compile_options(helloworld_cli PRIVATE
         -Wall -Wextra -pedantic -Werror
     )
-    target_compile_options(helloworld PRIVATE
+    target_compile_options(gtests PRIVATE
         -Wall -Wextra -pedantic -Werror
     )
 endif()
