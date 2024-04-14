@@ -34,6 +34,7 @@ jobs:
             cmake -B $dir/build -S $dir
             cmake --build $dir/build
             cmake --build $dir/build --target test
+            ls -la $dir/build # Выводим содержимое директории сборки
             cmake --build $dir/build --target package
           done
       - name: Create Release
