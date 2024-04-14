@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.8)
 
-set(PATCH_VERSION "46" CACHE INTERNAL "Patch version")
+set(PATCH_VERSION "47" CACHE INTERNAL "Patch version")
 set(PROJECT_VESRION 0.0.${PATCH_VERSION})
 project(ip_filter VERSION ${PROJECT_VESRION})
 
