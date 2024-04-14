@@ -51,7 +51,7 @@ gtest_discover_tests(gtests)
 
 # Настраиваем упаковщик для создания deb-пакета
 set(CPACK_GENERATOR DEB)
-set(CPACK_PACKAGE_NAME "print_ip")
+set(CPACK_PACKAGE_NAME ${PROJECT_NAME})
 set(CPACK_PACKAGE_CONTACT "example@example.com")
 include(CPack)
 enable_testing()
