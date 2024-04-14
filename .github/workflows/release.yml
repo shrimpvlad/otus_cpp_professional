@@ -31,6 +31,7 @@ jobs:
         run: |
           for dir in "${{ matrix.directory }}"; do
             echo "Building $dir directory"
+            cmake -B $dir/build -S $dir
             cmake --build $dir/build
             cmake --build $dir/build --target test
             cmake --build $dir/build --target package
