@@ -1,5 +1,8 @@
 cmake_minimum_required(VERSION 3.8)
+
 project(ip_filter)
+
+set(ENV{PROJECT_NAME} "ip_filter")
 
 add_executable(ipFilter main.cpp)
 
@@ -72,4 +75,5 @@ set(CPACK_GENERATOR DEB)
 set(CPACK_PACKAGE_NAME "ip_filter")
 set(CPACK_PACKAGE_CONTACT "example@example.com")
 include(CPack)
+
 enable_testing()

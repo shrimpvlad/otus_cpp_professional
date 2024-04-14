@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.8)
 project(print_ip)
 
+set(ENV{PROJECT_NAME} "print_ip")
+
 add_executable(printIp main.cpp)
 add_executable(gtests gtests.cpp)
 
