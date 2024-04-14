@@ -1,10 +1,10 @@
-cmake_minimum_required(VERSION 3.8)
+cmake_minimum_required(VERSION 3.10)
 
-set(PATCH_VERSION "47" CACHE INTERNAL "Patch version")
+set(PATCH_VERSION "46" CACHE INTERNAL "Patch version")
 set(PROJECT_VESRION 0.0.${PATCH_VERSION})
-project(ip_filter VERSION ${PROJECT_VESRION})
+project(02_ipFilter VERSION ${PROJECT_VESRION})
 
-set(ENV{PROJECT_NAME} "ip_filter")
+set(ENV{PROJECT_NAME} "02_ipFilter")
 
 configure_file(version.h.in version.h)
 
@@ -24,7 +24,6 @@ set_target_properties(ipFilter ip_filter_lib gtests PROPERTIES
     CXX_STANDARD_REQUIRED ON
 )
 
-# Устанавливаем опции компилятора
 if (MSVC)
     target_compile_options(ipFilter PRIVATE
         /W4
@@ -32,9 +31,9 @@ if (MSVC)
     target_compile_options(ip_filter_lib PRIVATE
         /W4
     )
-    # target_compile_options(gtests PRIVATE
-    #     /W4
-    # )
+    target_compile_options(gtests PRIVATE
+        /W4
+    )
 else ()
     target_compile_options(ipFilter PRIVATE
         -Wall -Wextra -pedantic -Werror
@@ -42,15 +41,13 @@ else ()
     target_compile_options(ip_filter_lib PRIVATE
         -Wall -Wextra -pedantic -Werror
     )
-    # target_compile_options(gtests PRIVATE
-    #     -Wall -Wextra -pedantic -Werror
-    # )
+    target_compile_options(gtests PRIVATE
+        -Wall -Wextra -pedantic -Werror
+    )
 endif()
 
-# Устанавливаем цель установки для исполняемого файла printIp
 install(TARGETS ipFilter RUNTIME DESTINATION bin)
 
-# Добавляем внешний проект Google Test
 include(FetchContent)
 FetchContent_Declare(
   googletest
@@ -59,13 +56,10 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-# Подключаем Google Test
 include(GoogleTest)
 
-# Линкуем исполняемый файл gtests с библиотеками Google Test и gtest_main
 target_link_libraries(gtests PRIVATE gtest gtest_main)
 
-# Включаем файлы с тестами в цели тестирования CTest
 gtest_discover_tests(gtests)
 
 add_custom_command(TARGET ipFilter POST_BUILD
@@ -74,7 +68,6 @@ add_custom_command(TARGET ipFilter POST_BUILD
     $<TARGET_FILE_DIR:ipFilter>
 )
 
-# Настраиваем упаковщик для создания deb-пакета
 set(CPACK_GENERATOR DEB)
 set(CPACK_PACKAGE_NAME ${PROJECT_NAME})
 set(CPACK_PACKAGE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")
@@ -85,66 +78,3 @@ include(CPack)
 
 enable_testing()
 
-
-#############################################################
-
-# cmake_minimum_required(VERSION 3.10)
-
-# set(PATCH_VERSION "30" CACHE INTERNAL "Patch version")
-# set(PROJECT_VESRION 0.0.${PATCH_VERSION})
-
-# project(01_helloWorld VERSION ${PROJECT_VESRION})
-
-# set(ENV{PROJECT_NAME} "01_helloWorld")
-
-# configure_file(version.h.in version.h)
-
-# add_executable(helloworld_cli main.cpp)
-# add_library(helloworld lib.cpp)
-
-# target_include_directories(helloworld
-#     PRIVATE "${CMAKE_BINARY_DIR}"
-# )
-
-# target_link_libraries(helloworld_cli PRIVATE
-#     helloworld
-# )
-
-# set_target_properties(helloworld_cli helloworld PROPERTIES
-#     CXX_STANDARD 17
-#     CXX_STANDARD_REQUIRED ON
-# )
-
-# if (MSVC)
-#     target_compile_options(helloworld_cli PRIVATE
-#         /W4
-#     )
-#     target_compile_options(helloworld PRIVATE
-#         /W4
-#     )
-# else ()
-#     target_compile_options(helloworld_cli PRIVATE
-#         -Wall -Wextra -pedantic -Werror
-#     )
-#     target_compile_options(helloworld PRIVATE
-#         -Wall -Wextra -pedantic -Werror
-#     )
-# endif()
-
-# install(TARGETS helloworld_cli RUNTIME DESTINATION bin)
-
-# set(CPACK_GENERATOR DEB)
-
-# set(CPACK_PACKAGE_NAME ${PROJECT_NAME})
-
-# set(CPACK_PACKAGE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")
-# set(CPACK_PACKAGE_VERSION_MINOR "${PROJECT_VERSION_MINOR}")
-# set(CPACK_PACKAGE_VERSION_PATCH "${PROJECT_VERSION_PATCH}")
-# set(CPACK_PACKAGE_CONTACT example@example.com)
-
-# include(CPack)
-# enable_testing()
-
-# add_subdirectory(GTests)
-
-# target_include_directories(tests PUBLIC ${CMAKE_BINARY_DIR})

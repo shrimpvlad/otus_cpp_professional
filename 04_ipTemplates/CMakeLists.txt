@@ -1,11 +1,15 @@
 cmake_minimum_required(VERSION 3.10)
-set(PATCH_VERSION "47" CACHE INTERNAL "Patch version")
-set(PROJECT_VESRION 0.0.${PATCH_VERSION})
-project(print_ip)
 
-set(ENV{PROJECT_NAME} "print_ip")
+set(PATCH_VERSION "46" CACHE INTERNAL "Patch version")
+set(PROJECT_VESRION 0.0.${PATCH_VERSION})
+project(04_ipTemplates VERSION ${PROJECT_VESRION})
+
+set(ENV{PROJECT_NAME} "04_ipTemplates")
+
 configure_file(version.h.in version.h)
+
 add_executable(printIp main.cpp)
+
 add_executable(gtests gtests.cpp)
 
 set_target_properties(printIp gtests PROPERTIES
@@ -13,7 +17,6 @@ set_target_properties(printIp gtests PROPERTIES
     CXX_STANDARD_REQUIRED ON
 )
 
-# Устанавливаем опции компилятора
 if (MSVC)
     target_compile_options(printIp PRIVATE
         /W4
@@ -30,10 +33,8 @@ else ()
     )
 endif()
 
-# Устанавливаем цель установки для исполняемого файла printIp
 install(TARGETS printIp RUNTIME DESTINATION bin)
 
-# Добавляем внешний проект Google Test
 include(FetchContent)
 FetchContent_Declare(
   googletest
@@ -42,16 +43,11 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-# Подключаем Google Test
 include(GoogleTest)
 
-# Линкуем исполняемый файл gtests с библиотеками Google Test и gtest_main
 target_link_libraries(gtests PRIVATE gtest gtest_main)
 
-# Включаем файлы с тестами в цели тестирования CTest
 gtest_discover_tests(gtests)
-
-# Настраиваем упаковщик для создания deb-пакета
 set(CPACK_GENERATOR DEB)
 set(CPACK_PACKAGE_NAME ${PROJECT_NAME})
 set(CPACK_PACKAGE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")
@@ -59,4 +55,5 @@ set(CPACK_PACKAGE_VERSION_MINOR "${PROJECT_VERSION_MINOR}")
 set(CPACK_PACKAGE_VERSION_PATCH "${PROJECT_VERSION_PATCH}")
 set(CPACK_PACKAGE_CONTACT "example@example.com")
 include(CPack)
+
 enable_testing()
