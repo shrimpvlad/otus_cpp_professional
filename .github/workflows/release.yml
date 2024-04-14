@@ -18,6 +18,8 @@ jobs:
           # - 03_allocator
           - 04_ipTemplates
     permissions: write-all
+    env:
+      PROJECT_NAME: ${{ matrix.directory }} # Устанавливаем PROJECT_NAME для всех директорий
     steps:
       - uses: actions/checkout@v3
         with:
@@ -47,7 +49,7 @@ jobs:
       - name: Print PROJECT_NAME for each directory
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PROJECT_NAME: ${{ env.PROJECT_NAME }}
+          PROJECT_NAME: ${{ env.PROJECT_NAME }} # Используем ранее установленное значение PROJECT_NAME
         run: |
           for dir in "${{ matrix.directory }}"; do
             echo "PROJECT_NAME for $dir is ${{ env.PROJECT_NAME }}"
@@ -63,5 +65,7 @@ jobs:
           asset_path: ${{ github.workspace }}/${{ matrix.directory }}/build/${{ env.PROJECT_NAME }}-0.0.${{ github.run_number }}-Linux.deb
           asset_name: ${{ env.PROJECT_NAME }}-0.0.${{ github.run_number }}-Linux.deb
           asset_content_type: application/vnd.debian.binary-package
+
+
         
         

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.8)
+cmake_minimum_required(VERSION 3.10)
 project(print_ip)
 
 set(ENV{PROJECT_NAME} "print_ip")

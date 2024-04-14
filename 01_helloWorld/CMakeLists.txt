@@ -1,10 +1,11 @@
 cmake_minimum_required(VERSION 3.10)
-get_property(PROJECT_NAME_STR TARGET 01_helloWorld PROPERTY PROJECT_NAME)
-set(ENV{PROJECT_NAME} ${PROJECT_NAME_STR})
+
 set(PATCH_VERSION "30" CACHE INTERNAL "Patch version")
 set(PROJECT_VESRION 0.0.${PATCH_VERSION})
 
 project(01_helloWorld VERSION ${PROJECT_VESRION})
+
+set(ENV{PROJECT_NAME} "01_helloWorld")
 
 configure_file(version.h.in version.h)
 
