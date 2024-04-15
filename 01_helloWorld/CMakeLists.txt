@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.10)
 
 project(01_helloWorld)
 
-set(BUILD_NUM 0 CACHE STRING "Build number")
+set(BUILD_NUMBER 0 CACHE STRING "Build number")
 
 configure_file(version.h.in version.h)
 
@@ -58,7 +58,7 @@ set(CPACK_GENERATOR DEB)
 set(CPACK_PACKAGE_NAME ${PROJECT_NAME})
 set(CPACK_PACKAGE_VERSION_MAJOR 0)
 set(CPACK_PACKAGE_VERSION_MINOR 0)
-set(CPACK_PACKAGE_VERSION_PATCH "${BUILD_NUM}")
+set(CPACK_PACKAGE_VERSION_PATCH "${BUILD_NUMBER}")
 set(CPACK_PACKAGE_CONTACT "example@example.com")
 
 include(CPack)
