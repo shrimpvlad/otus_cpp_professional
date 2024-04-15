@@ -2,5 +2,5 @@
 #include "version.h"
 
 TEST(CheckVersionNumber, correct_version) {
-    ASSERT_GT(VERSION, 1);
+    ASSERT_GT(int(VERSION), 1);
 }
