@@ -11,10 +11,10 @@ configure_file(version.h.in version.h)
 add_executable(helloworld_cli main.cpp)
 add_executable(gtests gtests.cpp)
 target_include_directories(helloworld_cli
-    PRIVATE "${PROJECT_BINARY_DIR}"
+    PUBLIC "${PROJECT_BINARY_DIR}"
 )
 target_include_directories(gtests
-    PRIVATE "${PROJECT_BINARY_DIR}"
+    PUBLIC "${PROJECT_BINARY_DIR}"
 )
 
 set_target_properties(helloworld_cli gtests PROPERTIES
