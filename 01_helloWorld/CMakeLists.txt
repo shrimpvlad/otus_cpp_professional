@@ -1,5 +1,5 @@
 
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.20)
 
 project(01_helloWorld)
 
@@ -64,4 +64,3 @@ set(CPACK_PACKAGE_CONTACT "example@example.com")
 include(CPack)
 
 enable_testing()
-
