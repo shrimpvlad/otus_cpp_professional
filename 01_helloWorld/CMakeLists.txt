@@ -5,7 +5,7 @@ project(01_helloWorld)
 
 set(BUILD_NUMBER 0 CACHE STRING "Build number")
 
-configure_file(version.h.in version.h @ONLY)
+configure_file(version.h.in version.h)
 
 
 add_executable(helloworld_cli main.cpp)
