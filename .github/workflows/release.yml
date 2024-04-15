@@ -32,6 +32,7 @@ jobs:
           for dir in "${{ matrix.directory }}"; do
             echo "Building $dir directory"
             cmake -B $dir/build -S $dir -D BUILD_NUMBER=${{ github.run_number }} ..
+            ls -la $dir/build # Выводим содержимое директории сборки
             cmake --build $dir/build
             cmake --build $dir/build --target test
             ls -la $dir/build # Выводим содержимое директории сборки
