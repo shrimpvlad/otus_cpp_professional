@@ -1,7 +1,7 @@
 
 cmake_minimum_required(VERSION 3.10)
 
-project(04_ipTemplates)
+project(printIP)
 
 add_executable(printIp main.cpp)
 
