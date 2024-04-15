@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.10)
 
 project(01_helloWorld)
 
-set(BUILD_NUMBER ${BUILD_NUMBER} CACHE STRING "Build number")
+set(BUILD_NUMBER 0 CACHE STRING "Build number")
 
 configure_file(version.h.in version.h)
 
