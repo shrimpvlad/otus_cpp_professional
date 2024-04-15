@@ -38,6 +38,8 @@ jobs:
             ls -la $dir/build # Выводим содержимое директории сборки
             cmake --build $dir/build --target package
           done
+      - name: Display LastTest.log
+        run: cat ${{ github.workspace }}/${{ matrix.directory }}/build/Testing/Temporary/LastTest.log
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
