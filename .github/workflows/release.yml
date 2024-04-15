@@ -25,7 +25,7 @@ jobs:
         with:
           submodules: true
       - run: sudo apt-get update && sudo apt-get install cmake libgtest-dev -y
-      - run: cmake . -DPATCH_VERSION=${{ github.run_number }} -DPROJECT_NAME=${{ env.PROJECT_NAME }} # Передаем PROJECT_NAME в CMake
+      - run: cmake . -DBUILD_NUMBER=${{ github.run_number }} -DPROJECT_NAME=${{ env.PROJECT_NAME }} # Передаем PROJECT_NAME в CMake
         working-directory: ${{ matrix.directory }}
       - name: Build ${{ matrix.directory }} directory
         run: |
