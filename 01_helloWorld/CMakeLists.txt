@@ -1,7 +1,7 @@
 
 cmake_minimum_required(VERSION 3.20)
 
-project(01_helloWorld)
+project(helloworld)
 
 set(BUILD_NUMBER 0 CACHE STRING "Build number")
 
