@@ -17,15 +17,21 @@ jobs:
           - 02_ipFilter
           # - 03_allocator
           - 04_ipTemplates
+        file_name:
+          - helloworld
+          - ip_filter
+          # - allocator
+          - print_ip
     permissions: write-all
     env:
-      PROJECT_NAME: ${{ matrix.directory }} # Устанавливаем PROJECT_NAME для всех директорий
+      PROJECT_NAME: ${{ matrix.directory }}
+      FILE_NAME: ${{ matrix.file_name}}
     steps:
       - uses: actions/checkout@v3
         with:
           submodules: true
       - run: sudo apt-get update && sudo apt-get install cmake libgtest-dev -y
-      - run: cmake . -DBUILD_NUMBER=${{ github.run_number }} -DPROJECT_NAME=${{ env.PROJECT_NAME }} # Передаем PROJECT_NAME в CMake
+      # - run: cmake . -DBUILD_NUMBER=${{ github.run_number }} -DPROJECT_NAME=${{ env.PROJECT_NAME }} # Передаем PROJECT_NAME в CMake
         working-directory: ${{ matrix.directory }}
       - name: Build ${{ matrix.directory }} directory
         run: |
@@ -38,15 +44,13 @@ jobs:
             ls -la $dir/build # Выводим содержимое директории сборки
             cmake --build $dir/build --target package
           done
-      - name: Display LastTest.log
-        run: cat ${{ github.workspace }}/${{ matrix.directory }}/build/Testing/Temporary/LastTest.log
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ env.PROJECT_NAME }}-${{ github.run_number }}
+          tag_name: ${{ env.FILE_NAME }}-${{ github.run_number }}
           release_name: Release ${{ github.run_number }}
           draft: false
           prerelease: false
@@ -57,6 +61,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ github.workspace }}/${{ matrix.directory }}/build/${{ env.PROJECT_NAME }}-0.0.${{ github.run_number }}-Linux.deb
-          asset_name: ${{ env.PROJECT_NAME }}-0.0.${{ github.run_number }}-Linux.deb
+          asset_path: ${{ github.workspace }}/${{ matrix.directory }}/build/${{ env.FILE_NAME }}-0.0.${{ github.run_number }}-Linux.deb
+          asset_name: ${{ env.FILE_NAME }}-0.0.${{ github.run_number }}-Linux.deb
           asset_content_type: application/vnd.debian.binary-package
