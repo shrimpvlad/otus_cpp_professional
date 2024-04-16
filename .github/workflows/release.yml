@@ -13,10 +13,10 @@ jobs:
     strategy:
       matrix:
         directory:
-          - 01_helloWorld
-          - 02_ipFilter
-          # - 03_allocator
-          - 04_ipTemplates
+          - helloworld
+          - ip_filter
+          # - allocator
+          - print_ip
     permissions: write-all
     env:
       PROJECT_NAME: ${{ matrix.directory }} # Устанавливаем PROJECT_NAME для всех директорий
@@ -25,7 +25,6 @@ jobs:
         with:
           submodules: true
       - run: sudo apt-get update && sudo apt-get install cmake libgtest-dev -y
-      # - run: cmake . -DBUILD_NUMBER=${{ github.run_number }} -DPROJECT_NAME=${{ env.PROJECT_NAME }} # Передаем PROJECT_NAME в CMake
         working-directory: ${{ matrix.directory }}
       - name: Build ${{ matrix.directory }} directory
         run: |
@@ -48,36 +47,13 @@ jobs:
           release_name: Release ${{ github.run_number }}
           draft: false
           prerelease: false
-      - name: Upload Release Asset for helloworld
-        id: upload-release-asset-helloworld
+      - name: Upload Release Asset
+        id: upload-release-asset
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ github.workspace }}/01_helloWorld/build/helloworld-0.0.${{ github.run_number }}-Linux.deb
-          asset_name: helloworld-0.0.${{ github.run_number }}-Linux.deb
+          asset_path: ${{ github.workspace }}/${{ matrix.directory }}/build/${{ env.PROJECT_NAME }}-0.0.${{ github.run_number }}-Linux.deb
+          asset_name: ${{ env.PROJECT_NAME }}-0.0.${{ github.run_number }}-Linux.deb
           asset_content_type: application/vnd.debian.binary-package
-        
-      - name: Upload Release Asset for ip_filter
-        id: upload-release-asset-ip-filter
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ github.workspace }}/02_ipFilter/build/ip_filter-0.0.${{ github.run_number }}-Linux.deb
-          asset_name: ip_filter-0.0.${{ github.run_number }}-Linux.deb
-          asset_content_type: application/vnd.debian.binary-package
-      
-      - name: Upload Release Asset for print_ip
-        id: upload-release-asset-print-ip
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ github.workspace }}/04_ipTemplates/build/print_ip-0.0.${{ github.run_number }}-Linux.deb
-          asset_name: print_ip-0.0.${{ github.run_number }}-Linux.deb
-          asset_content_type: application/vnd.debian.binary-package
-        
