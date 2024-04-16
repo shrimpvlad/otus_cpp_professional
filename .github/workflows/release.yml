@@ -15,29 +15,30 @@ jobs:
         directory:
           - 01_helloWorld
           - 02_ipFilter
-          # - 03_allocator
           - 04_ipTemplates
         file_name:
           - helloworld
           - ip_filter
-          # - allocator
           - print_ip
     permissions: write-all
     env:
       PROJECT_NAME: ${{ matrix.directory }}
-      FILE_NAME: ${{ matrix.file_name}}
+      FILE_NAME: ${{ matrix.file_name }}
     steps:
       - uses: actions/checkout@v3
         with:
           submodules: true
-      - run: sudo apt-get update && sudo apt-get install cmake libgtest-dev -y
-      # - run: cmake . -DBUILD_NUMBER=${{ github.run_number }} -DPROJECT_NAME=${{ env.PROJECT_NAME }} # Передаем PROJECT_NAME в CMake
-        working-directory: ${{ matrix.directory }}
-      - name: Build ${{ matrix.directory }} directory
+      - name: Install Dependencies
         run: |
-          for dir in "${{ matrix.directory }}"; do
+          sudo apt-get update
+          sudo apt-get install cmake libgtest-dev -y
+      - name: Build Project
+        run: |
+          for i in ${!PROJECT_NAME[@]}; do
+            dir=${matrix.directory[$i]}
+            file=${matrix.file_name[$i]}
             echo "Building $dir directory"
-            cmake -B $dir/build -S $dir -D BUILD_NUMBER=${{ github.run_number }} -D FILE_NAME=${{ matrix.file_name }}
+            cmake -B $dir/build -S $dir -D BUILD_NUMBER=${{ github.run_number }} -D FILE_NAME=$file
             ls -la $dir/build # Выводим содержимое директории сборки
             cmake --build $dir/build
             cmake --build $dir/build --target test
