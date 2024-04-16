@@ -12,14 +12,9 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        directory:
-          - 01_helloWorld
-          - 02_ipFilter
-          - 04_ipTemplates
-        file_name:
-          - helloworld
-          - ip_filter
-          - print_ip
+        directory: [01_helloWorld, 02_ipFilter, 04_ipTemplates]
+        file_name: [helloworld, ip_filter, print_ip]
+      fail-fast: false
     permissions: write-all
     env:
       PROJECT_NAME: ${{ matrix.directory }}
@@ -34,17 +29,15 @@ jobs:
           sudo apt-get install cmake libgtest-dev -y
       - name: Build Project
         run: |
-          for i in ${!PROJECT_NAME[@]}; do
-            dir=${matrix.directory[$i]}
-            file=${matrix.file_name[$i]}
-            echo "Building $dir directory"
-            cmake -B $dir/build -S $dir -D BUILD_NUMBER=${{ github.run_number }} -D FILE_NAME=$file
-            ls -la $dir/build # Выводим содержимое директории сборки
-            cmake --build $dir/build
-            cmake --build $dir/build --target test
-            ls -la $dir/build # Выводим содержимое директории сборки
-            cmake --build $dir/build --target package
-          done
+          dir=${PROJECT_NAME}
+          file=${FILE_NAME}
+          echo "Building $dir directory"
+          cmake -B $dir/build -S $dir -D BUILD_NUMBER=${{ github.run_number }} -D FILE_NAME=$file
+          ls -la $dir/build # Выводим содержимое директории сборки
+          cmake --build $dir/build
+          cmake --build $dir/build --target test
+          ls -la $dir/build # Выводим содержимое директории сборки
+          cmake --build $dir/build --target package
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
