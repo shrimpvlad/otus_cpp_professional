@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         directory:
-          - 01_helloworld
+          - 01_helloWorld
           - 02_ipFilter
           # - 03_allocator
           - 04_ipTemplates
