@@ -12,24 +12,26 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        build:
-          - {"directory": "01_helloWorld", "file_name": "helloworld"}
-          - {"directory": "02_ipFilter", "file_name": "ip_filter"}
-          - {"directory": "04_ipTemplates", "file_name": "print_ip"}
+        directory:
+          - 01_helloworld
+          - 02_ipFilter
+          # - 03_allocator
+          - 04_ipTemplates
     permissions: write-all
+    env:
+      PROJECT_NAME: ${{ matrix.directory }} # Устанавливаем PROJECT_NAME для всех директорий
     steps:
       - uses: actions/checkout@v3
         with:
           submodules: true
-      - name: Install dependencies
-        run: sudo apt-get update && sudo apt-get install cmake libgtest-dev -y
-      - name: Build and test
+      - run: sudo apt-get update && sudo apt-get install cmake libgtest-dev -y
+      # - run: cmake . -DBUILD_NUMBER=${{ github.run_number }} -DPROJECT_NAME=${{ env.PROJECT_NAME }} # Передаем PROJECT_NAME в CMake
+        working-directory: ${{ matrix.directory }}
+      - name: Build ${{ matrix.directory }} directory
         run: |
-          for build in ${{ matrix.build }}; do
-            dir=$(echo "$build" | jq -r '.directory')
-            file=$(echo "$build" | jq -r '.file_name')
+          for dir in "${{ matrix.directory }}"; do
             echo "Building $dir directory"
-            cmake -B $dir/build -S $dir -D BUILD_NUMBER=${{ github.run_number }} -D FILE_NAME=$file
+            cmake -B $dir/build -S $dir -D BUILD_NUMBER=${{ github.run_number }}
             ls -la $dir/build # Выводим содержимое директории сборки
             cmake --build $dir/build
             cmake --build $dir/build --target test
@@ -42,17 +44,40 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ matrix.build.file_name }}-${{ github.run_number }}
+          tag_name: ${{ env.PROJECT_NAME }}-${{ github.run_number }}
           release_name: Release ${{ github.run_number }}
           draft: false
           prerelease: false
-      - name: Upload Release Asset
-        id: upload-release-asset
+      - name: Upload Release Asset for helloworld
+        id: upload-release-asset-helloworld
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ github.workspace }}/${{ matrix.build.directory }}/build/${{ matrix.build.file_name }}-0.0.${{ github.run_number }}-Linux.deb
-          asset_name: ${{ matrix.build.file_name }}-0.0.${{ github.run_number }}-Linux.deb
+          asset_path: ${{ github.workspace }}/01_helloWorld/build/helloworld-0.0.${{ github.run_number }}-Linux.deb
+          asset_name: helloworld-0.0.${{ github.run_number }}-Linux.deb
           asset_content_type: application/vnd.debian.binary-package
+        
+      - name: Upload Release Asset for ip_filter
+        id: upload-release-asset-ip-filter
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ github.workspace }}/02_ipFilter/build/ip_filter-0.0.${{ github.run_number }}-Linux.deb
+          asset_name: ip_filter-0.0.${{ github.run_number }}-Linux.deb
+          asset_content_type: application/vnd.debian.binary-package
+      
+      - name: Upload Release Asset for print_ip
+        id: upload-release-asset-print-ip
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ github.workspace }}/04_ipTemplates/build/print_ip-0.0.${{ github.run_number }}-Linux.deb
+          asset_name: print_ip-0.0.${{ github.run_number }}-Linux.deb
+          asset_content_type: application/vnd.debian.binary-package
+        

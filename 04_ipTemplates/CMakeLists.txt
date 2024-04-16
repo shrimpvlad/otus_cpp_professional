@@ -1,7 +1,7 @@
 
 cmake_minimum_required(VERSION 3.10)
 
-project(printIP)
+project(print_ip)
 
 add_executable(printIp main.cpp)
 
