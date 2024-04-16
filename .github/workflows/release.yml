@@ -12,25 +12,20 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        builds:
-          - directory: 01_helloWorld
-            file_name: helloworld
-          - directory: 02_ipFilter
-            file_name: ip_filter
-          - directory: 04_ipTemplates
-            file_name: print_ip
+        build:
+          - '{"directory": "01_helloWorld", "file_name": "helloworld"}'
+          - '{"directory": "02_ipFilter", "file_name": "ip_filter"}'
+          - '{"directory": "04_ipTemplates", "file_name": "print_ip"}'
     permissions: write-all
     steps:
       - uses: actions/checkout@v3
         with:
           submodules: true
-      - name: Install Dependencies
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install cmake libgtest-dev -y
+      - name: Build and test
         run: |
-          sudo apt-get update
-          sudo apt-get install cmake libgtest-dev -y
-      - name: Build Project
-        run: |
-          for build in "${{ matrix.builds }}"; do
+          for build in "${{ matrix.build }}"; do
             dir=$(echo "$build" | jq -r '.directory')
             file=$(echo "$build" | jq -r '.file_name')
             echo "Building $dir directory"
@@ -47,7 +42,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ matrix.builds.file_name }}-${{ github.run_number }}
+          tag_name: ${{ matrix.build.file_name }}-${{ github.run_number }}
           release_name: Release ${{ github.run_number }}
           draft: false
           prerelease: false
@@ -58,6 +53,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ github.workspace }}/${{ matrix.builds.directory }}/build/${{ matrix.builds.file_name }}-0.0.${{ github.run_number }}-Linux.deb
-          asset_name: ${{ matrix.builds.file_name }}-0.0.${{ github.run_number }}-Linux.deb
+          asset_path: ${{ github.workspace }}/${{ matrix.build.directory }}/build/${{ matrix.build.file_name }}-0.0.${{ github.run_number }}-Linux.deb
+          asset_name: ${{ matrix.build.file_name }}-0.0.${{ github.run_number }}-Linux.deb
           asset_content_type: application/vnd.debian.binary-package
