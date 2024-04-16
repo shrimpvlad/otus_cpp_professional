@@ -13,9 +13,9 @@ jobs:
     strategy:
       matrix:
         build:
-          - '{"directory": "01_helloWorld", "file_name": "helloworld"}'
-          - '{"directory": "02_ipFilter", "file_name": "ip_filter"}'
-          - '{"directory": "04_ipTemplates", "file_name": "print_ip"}'
+          - {"directory": "01_helloWorld", "file_name": "helloworld"}
+          - {"directory": "02_ipFilter", "file_name": "ip_filter"}
+          - {"directory": "04_ipTemplates", "file_name": "print_ip"}
     permissions: write-all
     steps:
       - uses: actions/checkout@v3
@@ -25,7 +25,7 @@ jobs:
         run: sudo apt-get update && sudo apt-get install cmake libgtest-dev -y
       - name: Build and test
         run: |
-          for build in "${{ matrix.build }}"; do
+          for build in ${{ matrix.build }}; do
             dir=$(echo "$build" | jq -r '.directory')
             file=$(echo "$build" | jq -r '.file_name')
             echo "Building $dir directory"
