@@ -17,6 +17,7 @@ jobs:
           - ip_filter
           # - allocator
           - print_ip
+          - editor
     permissions: write-all
     env:
       PROJECT_NAME: ${{ matrix.directory }} # Устанавливаем PROJECT_NAME для всех директорий
