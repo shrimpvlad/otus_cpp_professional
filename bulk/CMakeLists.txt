@@ -4,17 +4,14 @@ project(bulk)
 
 add_executable(bulk main.cpp)
 
-add_library(observer_lib observer.cpp observable.cpp)
+add_executable(gtests gtests.cpp)
 
-add_executable(gtests gtests.cpp observer.cpp observable.cpp)
-
-target_include_directories(observer_lib
+target_include_directories(bulk
     PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}"
 )
-target_link_libraries(bulk PRIVATE observer_lib)
 
-set_target_properties(bulk observer_lib gtests PROPERTIES
-    CXX_STANDARD 17
+set_target_properties(bulk gtests PROPERTIES
+    CXX_STANDARD 20
     CXX_STANDARD_REQUIRED ON
 )
 
@@ -22,17 +19,11 @@ if (MSVC)
     target_compile_options(bulk PRIVATE
         /W4
     )
-    target_compile_options(observer_lib PRIVATE
-        /W4
-    )
     target_compile_options(gtests PRIVATE
         /W4
     )
 else ()
     target_compile_options(bulk PRIVATE
-        -Wall -Wextra -pedantic -Werror
-    )
-    target_compile_options(observer_lib PRIVATE
         -Wall -Wextra -pedantic -Werror
     )
     target_compile_options(gtests PRIVATE
@@ -65,3 +56,4 @@ set(CPACK_PACKAGE_CONTACT "example@example.com")
 include(CPack)
 
 enable_testing()
+

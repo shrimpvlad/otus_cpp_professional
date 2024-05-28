@@ -19,6 +19,7 @@ jobs:
           - print_ip
           - editor
           - matrix
+          - bulk
     permissions: write-all
     env:
       PROJECT_NAME: ${{ matrix.directory }} 
