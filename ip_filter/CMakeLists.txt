@@ -1,38 +1,38 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(bulk)
+project(ip_filter)
 
-add_executable(bulk main.cpp)
+add_executable(ipFilter main.cpp)
 
-add_library(observer_lib observer.cpp observable.cpp)
+add_library(ip_filter_lib ip_filter.cpp ip_filter.h)
 
-add_executable(gtests gtests.cpp observer.cpp observable.cpp)
+add_executable(gtests gtests.cpp ip_filter.cpp)
 
-target_include_directories(observer_lib
+target_include_directories(ip_filter_lib
     PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}"
 )
-target_link_libraries(bulk PRIVATE observer_lib)
+target_link_libraries(ipFilter PRIVATE ip_filter_lib)
 
-set_target_properties(bulk observer_lib gtests PROPERTIES
+set_target_properties(ipFilter ip_filter_lib gtests PROPERTIES
     CXX_STANDARD 17
     CXX_STANDARD_REQUIRED ON
 )
 
 if (MSVC)
-    target_compile_options(bulk PRIVATE
+    target_compile_options(ipFilter PRIVATE
         /W4
     )
-    target_compile_options(observer_lib PRIVATE
+    target_compile_options(ip_filter_lib PRIVATE
         /W4
     )
     target_compile_options(gtests PRIVATE
         /W4
     )
 else ()
-    target_compile_options(bulk PRIVATE
+    target_compile_options(ipFilter PRIVATE
         -Wall -Wextra -pedantic -Werror
     )
-    target_compile_options(observer_lib PRIVATE
+    target_compile_options(ip_filter_lib PRIVATE
         -Wall -Wextra -pedantic -Werror
     )
     target_compile_options(gtests PRIVATE
@@ -40,7 +40,7 @@ else ()
     )
 endif()
 
-install(TARGETS bulk RUNTIME DESTINATION bin)
+install(TARGETS ipFilter RUNTIME DESTINATION bin)
 
 include(FetchContent)
 FetchContent_Declare(
@@ -56,6 +56,12 @@ target_link_libraries(gtests PRIVATE gtest gtest_main)
 
 gtest_discover_tests(gtests)
 
+add_custom_command(TARGET ipFilter POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy
+    ${CMAKE_CURRENT_SOURCE_DIR}/ip_filter.tsv
+    $<TARGET_FILE_DIR:ipFilter>
+)
+
 set(CPACK_GENERATOR DEB)
 set(CPACK_PACKAGE_NAME ${PROJECT_NAME})
 set(CPACK_PACKAGE_VERSION_MAJOR 0)
@@ -65,3 +71,4 @@ set(CPACK_PACKAGE_CONTACT "example@example.com")
 include(CPack)
 
 enable_testing()
+
